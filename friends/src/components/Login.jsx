@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserDetails } from '../state/redux';
 import axios from 'axios';
 
 export default function Login(props) {
-    const initialUserDetails = { username: '', password: '', };
-    const [userDetails, setUserDetails] = useState(initialUserDetails);
+    const userDetails = useSelector(state => state.userDetails);
+    const dispatch = useDispatch();
 
     const handleChange = e => {
-        setUserDetails({
+        dispatch(setUserDetails({
         ...userDetails,
         [e.target.name]: e.target.value,
-        });
+        }));
     } 
 
     const handleSubmit = e => {

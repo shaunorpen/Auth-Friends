@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { setFriendsList } from '../state/redux';
 import Friend from './Friend';
 import AddOrUpdateFriend from './AddOrUpdateFriend';
-
 import axiosWithAuth from '../helpers/axiosWithAuth';
 
 export default function Friends() {
-    const [friendList, setFriendList] = useState([]);
+    const friendList = useSelector(state => state.friendList);
+    const dispatch = useDispatch();
+
     const initialFormValues = {
         name: '',
         age: '',
@@ -16,12 +18,12 @@ export default function Friends() {
 
     useEffect(() => {
         axiosWithAuth().get('http://localhost:5000/api/friends')
-        .then(res => {
-        setFriendList(res.data);
-        })
-        .catch(err => {
-        alert(err.response.data.error);
-        });
+            .then(res => {
+                dispatch(setFriendsList(res.data));
+            })
+            .catch(err => {
+                alert(err.response.data.error);
+            });
     }, []);
 
     return (
@@ -29,12 +31,10 @@ export default function Friends() {
         <h2>Friend List</h2>
         <ul>
             {friendList.map(friend => <Friend friend={friend} 
-                                            setFriendList={setFriendList}
                                             setFormValues={setFormValues}
                                             key={friend.id} />)}
         </ul>
         <AddOrUpdateFriend 
-            setFriendList={setFriendList}
             formValues={formValues}
             setFormValues={setFormValues}
             initialFormValues={initialFormValues} />

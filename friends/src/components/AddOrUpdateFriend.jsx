@@ -1,13 +1,17 @@
 import React from 'react';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { setFormValues, setFriendsList, initialFormValues } from '../state/redux';
 import axiosWithAuth from '../helpers/axiosWithAuth';
 
-export default function AddOrUpdateFriend({ setFriendList, formValues, setFormValues, initialFormValues }) {
+export default function AddOrUpdateFriend() {
+    const formValues = useSelector(state => state.formValues);
+    const dispatch = useDispatch();
+
     const handleChange = e => {
-      setFormValues({
+      dispatch(setFormValues({
         ...formValues,
         [e.target.name]: e.target.value,
-      });
+      }));
     }
   
     const handleAddOrUpdateFriend = e => {
@@ -18,17 +22,17 @@ export default function AddOrUpdateFriend({ setFriendList, formValues, setFormVa
           email: formValues.email,
         })
           .then(res => {
-            setFriendList(res.data);
-            setFormValues(initialFormValues);
+            dispatch(setFriendsList(res.data));
+            dispatch(setFormValues(initialFormValues));
           })
           .catch(err => {
             alert(err.response.data.message);
           })
-      } else {
-        axiosWithAuth().post('http://localhost:5000/api/friends', formValues)
+        } else {
+          axiosWithAuth().post('http://localhost:5000/api/friends', formValues)
           .then(res => {
-            setFriendList(res.data);
-            setFormValues(initialFormValues);
+            dispatch(setFriendsList(res.data));
+            dispatch(setFormValues(initialFormValues));
           })
           .catch(err => {
             alert(err.response.data.message);
