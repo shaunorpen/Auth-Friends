@@ -95,7 +95,8 @@ function Friends() {
       <ul>
         {friendList.map(friend => <Friend friend={friend} 
                                           setFriendList={setFriendList}
-                                          setFormValues={setFormValues} />)}
+                                          setFormValues={setFormValues}
+                                          key={friend.id} />)}
       </ul>
       <AddOrUpdateFriend 
         setFriendList={setFriendList}
