@@ -8,7 +8,7 @@ function NavBar() {
         Login
       </Link></li>
       <li><Link to='/friends'>
-        Friends List
+        Friend List
       </Link></li>
     </ul>
   )
@@ -31,22 +31,25 @@ function Friends() {
   return (
     <div>
       <h2>Friend List</h2>
-      <Friend />
+      <ul>
+        <Friend />
+      </ul>
     </div>
   );
 }
 
 function Friend() {
   return (
-    <div>
+    <li>
       Friend
-    </div>
+    </li>
   );
 }
 
 function App() {
   return (
     <div className="App">
+      <h1>Friends App</h1>
       <Route path='/' component={NavBar} />
       <Route path='/' exact component={Login} />
       <Route path='/friends' component={Friends} />
