@@ -87,7 +87,7 @@ function Friends() {
       <ul>
         {friendList.map(friend => <Friend friend={friend} />)}
       </ul>
-      <AddOrUpdateFriend setFriendList={setFriendList} />
+      <AddFriend setFriendList={setFriendList} />
     </div>
   );
 }
@@ -100,7 +100,7 @@ function Friend({ friend: { name, age, email } }) {
   );
 }
 
-function AddOrUpdateFriend({ setFriendList }) {
+function AddFriend({ setFriendList }) {
   const initialFormValues = {
     name: '',
     age: '',
@@ -128,7 +128,7 @@ function AddOrUpdateFriend({ setFriendList }) {
 
   return (
     <div>
-      <h2>Add or Update Friend</h2>
+      <h2>Add Friend</h2>
       <label htmlFor='name'>Name: </label>
       <input type='text' name='name' value={formValues.name} onChange={handleChange} />
       <label htmlFor='age'>Age: </label>
