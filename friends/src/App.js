@@ -93,7 +93,9 @@ function Friends() {
     <div>
       <h2>Friend List</h2>
       <ul>
-        {friendList.map(friend => <Friend friend={friend} setFriendList={setFriendList} />)}
+        {friendList.map(friend => <Friend friend={friend} 
+                                          setFriendList={setFriendList}
+                                          setFormValues={setFormValues} />)}
       </ul>
       <AddFriend 
         setFriendList={setFriendList}
@@ -104,9 +106,8 @@ function Friends() {
   );
 }
 
-function Friend({ friend: { id, name, age, email }, setFriendList }) {
-  const handleDelete = (id) => e => {
-    debugger
+function Friend({ friend: { id, name, age, email }, setFriendList, setFormValues }) {
+  const handleDelete = id => e => {
     axiosWithAuth().delete(`http://localhost:5000/api/friends/${id}`)
       .then(res => {
         setFriendList(res.data);
@@ -115,10 +116,20 @@ function Friend({ friend: { id, name, age, email }, setFriendList }) {
         alert(err.response.data.message);
       })
   }
+
+  const handleUpdate = (id, name, age, email) => e => {
+    setFormValues({
+      id,
+      name,
+      age,
+      email,
+    })
+  }
+
   return (
     <li>
       {name} is {age} years old and contactable at {email}.
-      <button>Update Friend</button>
+      <button onClick={handleUpdate(id, name, age, email)} >Update Friend</button>
       <button onClick={handleDelete(id)} >Delete Friend</button>
     </li>
   );
