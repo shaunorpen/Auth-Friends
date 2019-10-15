@@ -72,6 +72,12 @@ function axiosWithAuth() {
 
 function Friends() {
   const [friendList, setFriendList] = useState([]);
+  const initialFormValues = {
+    name: '',
+    age: '',
+    email: '',
+  }
+  const [formValues, setFormValues] = useState(initialFormValues);
   
   useEffect(() => {
     axiosWithAuth().get('http://localhost:5000/api/friends')
@@ -89,7 +95,11 @@ function Friends() {
       <ul>
         {friendList.map(friend => <Friend friend={friend} setFriendList={setFriendList} />)}
       </ul>
-      <AddFriend setFriendList={setFriendList} />
+      <AddFriend 
+        setFriendList={setFriendList}
+        formValues={formValues}
+        setFormValues={setFormValues}
+        initialFormValues={initialFormValues} />
     </div>
   );
 }
@@ -114,14 +124,7 @@ function Friend({ friend: { id, name, age, email }, setFriendList }) {
   );
 }
 
-function AddFriend({ setFriendList }) {
-  const initialFormValues = {
-    name: '',
-    age: '',
-    email: '',
-  }
-  const [formValues, setFormValues] = useState(initialFormValues);
-
+function AddFriend({ setFriendList, formValues, setFormValues, initialFormValues }) {
   const handleChange = e => {
     setFormValues({
       ...formValues,
