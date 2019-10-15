@@ -87,6 +87,7 @@ function Friends() {
       <ul>
         {friendList.map(friend => <Friend friend={friend} />)}
       </ul>
+      <AddOrUpdateFriend setFriendList={setFriendList} />
     </div>
   );
 }
@@ -96,6 +97,46 @@ function Friend({ friend: { name, age, email } }) {
     <li>
       {name} is {age} years old and contactable at {email}.
     </li>
+  );
+}
+
+function AddOrUpdateFriend({ setFriendList }) {
+  const initialFormValues = {
+    name: '',
+    age: '',
+    email: '',
+  }
+  const [formValues, setFormValues] = useState(initialFormValues);
+
+  const handleChange = e => {
+    setFormValues({
+      ...formValues,
+      [e.target.name]: e.target.value,
+    });
+  }
+
+  const handleAddFriend = e => {
+    axiosWithAuth().post('http://localhost:5000/api/friends', formValues)
+      .then(res => {
+        setFriendList(res.data);
+        setFormValues(initialFormValues);
+      })
+      .catch(err => {
+        alert(err.response.data.message);
+      });
+  }
+
+  return (
+    <div>
+      <h2>Add or Update Friend</h2>
+      <label htmlFor='name'>Name: </label>
+      <input type='text' name='name' value={formValues.name} onChange={handleChange} />
+      <label htmlFor='age'>Age: </label>
+      <input type='number' name='age' value={formValues.age} onChange={handleChange} />
+      <label htmlFor='email'>Email: </label>
+      <input type='email' name='email' value={formValues.email} onChange={handleChange} />
+      <button onClick={handleAddFriend} >Add Friend</button>
+    </div>
   );
 }
 
