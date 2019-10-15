@@ -47,9 +47,9 @@ function Friend() {
 function App() {
   return (
     <div className="App">
-      <NavBar />
-      <Login />
-      <Friends />
+      <Route path='/' component={NavBar} />
+      <Route path='/' exact component={Login} />
+      <Route path='/friends' component={Friends} />
     </div>
   );
 }
