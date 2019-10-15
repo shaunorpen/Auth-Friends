@@ -91,7 +91,7 @@ function Friends() {
 function Friend({ friend: { name, age, email } }) {
   return (
     <li>
-      {`${name} is ${age} years old and contactable at ${email}.`}
+      {name} is {age} years old and contactable at {email}.
     </li>
   );
 }
