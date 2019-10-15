@@ -72,6 +72,7 @@ function axiosWithAuth() {
 
 function Friends() {
   const [friendList, setFriendList] = useState([]);
+  
   useEffect(() => {
     axiosWithAuth().get('http://localhost:5000/api/friends')
     .then(res => {
@@ -81,21 +82,34 @@ function Friends() {
       alert(err.response.data.error);
     });
   }, []);
+  
   return (
     <div>
       <h2>Friend List</h2>
       <ul>
-        {friendList.map(friend => <Friend friend={friend} />)}
+        {friendList.map(friend => <Friend friend={friend} setFriendList={setFriendList} />)}
       </ul>
       <AddFriend setFriendList={setFriendList} />
     </div>
   );
 }
 
-function Friend({ friend: { name, age, email } }) {
+function Friend({ friend: { id, name, age, email }, setFriendList }) {
+  const handleDelete = (id) => e => {
+    debugger
+    axiosWithAuth().delete(`http://localhost:5000/api/friends/${id}`)
+      .then(res => {
+        setFriendList(res.data);
+      })
+      .catch(err => {
+        alert(err.response.data.message);
+      })
+  }
   return (
     <li>
       {name} is {age} years old and contactable at {email}.
+      <button>Update Friend</button>
+      <button onClick={handleDelete(id)} >Delete Friend</button>
     </li>
   );
 }
