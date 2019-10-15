@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, Redirect } from 'react-router-dom';
 
 function NavBar(props) {
   const isLoggedIn = localStorage.getItem('token');
@@ -11,14 +11,17 @@ function NavBar(props) {
   }
 
   return (
-    <ul>
-      <li><Link to='/' onClick={handleLogout} >
-        {isLoggedIn ? 'Logout' : 'Login'}
-      </Link></li>
-      <li><Link to='/friends'>
-        Friend List
-      </Link></li>
-    </ul>
+    <div>
+      <h2>Navigation</h2>
+      <ul>
+        <li><Link to='/' onClick={handleLogout} >
+          {isLoggedIn ? 'Logout' : 'Login'}
+        </Link></li>
+        <li><Link to='/friends'>
+          Friend List
+        </Link></li>
+      </ul>
+    </div>
   )
 }
 
@@ -96,13 +99,20 @@ function Friend({ friend: { name, age, email } }) {
   );
 }
 
+function withAuthCheck(Component) {
+  if (localStorage.getItem('token')) {
+    return <Component />;
+  }
+  return <Redirect to='/' />;
+}
+
 function App() {
   return (
     <div className="App">
       <h1>Friends App</h1>
       <Route path='/' component={NavBar} />
       <Route path='/' exact component={Login} />
-      <Route path='/friends' component={Friends} />
+      <Route path='/friends' render={() => withAuthCheck(Friends)} />
     </div>
   );
 }
