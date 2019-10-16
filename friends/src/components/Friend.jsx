@@ -1,19 +1,12 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { setFriendsList, setFormValues } from '../state/redux';
-import axiosWithAuth from '../helpers/axiosWithAuth';
+import { setFormValues, deleteFriend } from '../state/redux';
 
 export default function Friend({ friend: { id, name, age, email } }) {
     const dispatch = useDispatch();
 
     const handleDelete = id => e => {
-        axiosWithAuth().delete(`http://localhost:5000/api/friends/${id}`)
-        .then(res => {
-            dispatch(setFriendsList(res.data));
-        })
-        .catch(err => {
-            alert(err.response.data.message);
-        })
+        dispatch(deleteFriend(id));
     }
 
     const handleUpdate = formValues => e => {

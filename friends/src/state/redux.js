@@ -1,4 +1,6 @@
-import { combineReducers, createStore } from 'redux';
+import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
+import axiosWithAuth from '../helpers/axiosWithAuth';
+import thunk from 'redux-thunk';
 
 // Actions
 
@@ -27,6 +29,42 @@ export function setFormValues(formValues) {
         type: SET_FORM_VALUES,
         payload: formValues,
     };
+}
+
+export const addFriend = friend => dispatch => {
+    axiosWithAuth().post('http://localhost:5000/api/friends', friend)
+        .then(res => {
+            dispatch(setFriendsList(res.data));
+            dispatch(setFormValues(initialFormValues));
+        })
+        .catch(err => {
+            alert(err.response.data.message);
+        });  
+}
+
+export const updateFriend = friend => dispatch => {
+    axiosWithAuth().put(`http://localhost:5000/api/friends/${friend.id}`, {
+            name: friend.name,
+            age: friend.age,
+            email: friend.email,
+        })
+        .then(res => {
+            dispatch(setFriendsList(res.data));
+            dispatch(setFormValues(initialFormValues));
+        })
+        .catch(err => {
+            alert(err.response.data.message);
+        });
+}
+
+export const deleteFriend = id => dispatch => {
+    axiosWithAuth().delete(`http://localhost:5000/api/friends/${id}`)
+        .then(res => {
+            dispatch(setFriendsList(res.data));
+        })
+        .catch(err => {
+            alert(err.response.data.message);
+        });
 }
 
 // Initial State
@@ -76,5 +114,8 @@ const rootReducer = combineReducers({
 
 export const store = createStore(
     rootReducer, 
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    compose(
+        applyMiddleware(thunk),
+        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+    ),
 );
