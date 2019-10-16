@@ -13,6 +13,10 @@ export default function AddOrUpdateFriend() {
         [e.target.name]: e.target.value,
       }));
     }
+
+    const handleCancel = e => {
+      dispatch(setFormValues(initialFormValues));
+    }
   
     const handleAddOrUpdateFriend = e => {
       if (formValues.id) {
@@ -50,6 +54,7 @@ export default function AddOrUpdateFriend() {
         <label htmlFor='email'>Email: </label>
         <input type='email' name='email' value={formValues.email} onChange={handleChange} />
         <button onClick={handleAddOrUpdateFriend} >{formValues.id ? 'Update' : 'Add'} Friend</button>
+        <button onClick={handleCancel} >Cancel</button>
       </div>
     );
 }
