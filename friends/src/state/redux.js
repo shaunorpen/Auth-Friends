@@ -67,6 +67,16 @@ export const deleteFriend = id => dispatch => {
         });
 }
 
+export const getFriends = () => dispatch => {
+    axiosWithAuth().get('http://localhost:5000/api/friends')
+        .then(res => {
+            dispatch(setFriendsList(res.data));
+        })
+        .catch(err => {
+            alert(err.response.data.error);
+        });
+}
+
 // Initial State
 
 const initialUserDetails = { username: '', password: '', };
